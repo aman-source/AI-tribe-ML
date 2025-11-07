@@ -120,4 +120,6 @@ def forecast_next_week():
         model = model_from_json(json.load(f))
     future = model.make_future_dataframe(periods=7)
     forecast = model.predict(future)
-    return forecast[["ds","yhat"]].tail(7).to_dict(orient="records")
+    window = forecast[["ds", "yhat"]].tail(7).copy()
+    window["ds"] = window["ds"].dt.strftime("%Y-%m-%d")
+    return window.to_dict(orient="records")
