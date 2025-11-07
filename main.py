@@ -1,12 +1,23 @@
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
 from datetime import datetime
+from fastapi.middleware.cors import CORSMiddleware
 from ml_model import (
     load_csv, train_regression, train_classifier, train_forecaster,
     predict_cycle_time, predict_completion_prob, forecast_next_week
 )
 
 app = FastAPI(title="Team Productivity CSV ML Backend")
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],        # Allow all origins
+    allow_credentials=True,
+    allow_methods=["*"],        # Allow all HTTP methods (GET, POST, etc.)
+    allow_headers=["*"],        # Allow all headers
+)
+
 
 # ---- Schemas ----
 class TaskInput(BaseModel):
